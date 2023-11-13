@@ -1,0 +1,54 @@
+name: trail-race-cqrs-ed-api
+version: '3'
+
+services:
+  postgres-db:
+    image: postgres
+    container_name: postgres-db
+    restart: always
+    networks:
+      - localNetwork
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./cfg/init-script.sh:/docker-entrypoint-initdb.d/init-script.sh
+      - ./cfg/pghome:/home
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+
+  postgres-ui:
+    image: dpage/pgadmin4
+    container_name: postgres-ui
+    restart: always
+    networks:
+      - localNetwork
+    ports:
+      - "8888:80"
+    volumes:
+      - ./cfg/servers.json:/pgadmin4/servers.json # preconfigured servers/connections
+      - ./cfg/pgpass:/pgpass # passwords for the connections in this file
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    depends_on:
+      - postgres-db
+
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: rabbit-mq
+    restart: always
+    networks:
+      - localNetwork
+    ports:
+      # AMQP protocol port
+      - "5672:5672"
+      # HTTP management UI
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin
+
+networks:
+  localNetwork:
+    name: localNetwork

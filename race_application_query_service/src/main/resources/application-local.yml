@@ -1,0 +1,29 @@
+server:
+  port: 9002
+spring:
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
+  datasource:
+    url: jdbc:postgresql://localhost:5432/races
+    username: admin
+    password: admin
+    initialization-mode: always
+    initialize: true
+    schema: classpath:/schema.sql
+    continue-on-error: true
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: admin
+    password: admin
+    queue:
+      name: races_queue
+    exchange:
+      name: races_exchange
+    routing:
+      key: races_routing_key

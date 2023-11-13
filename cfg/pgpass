@@ -1,0 +1,3 @@
+host.docker.internal:5432:postgres:admin:admin
+host.docker.internal:5432:races:admin:admin
+host.docker.internal:5432:users:admin:admin
